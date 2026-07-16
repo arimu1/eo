@@ -5,12 +5,12 @@
 # ```
 # copied > total-bytes
 #   bytes-as-input 01-02-03-04-05
-#   malloc.chunk.as-output memory
+#   malloc.chunk.to-output memory
 # ```
 # After dataization, `total-bytes` equals 5, and all bytes have been
 # copied from input to output.
 
-+alias malloc.chunk.as-output
++alias malloc.chunk.to-output
 +architect yegor256@gmail.com
 +home https://github.com/objectionary/eo
 +package io
@@ -33,7 +33,7 @@
             *
               copied
                 bytes-as-input 01-02-03-04-05
-                as-output m
+                to-output m
               m
       01-02-03-04-05
 
@@ -44,7 +44,7 @@
         [m]
           copied > @
             bytes-as-input 01-02-03-04-05-06-07-08-09-10
-            as-output m
+            to-output m
       10
 
   ++> tests-handles-empty-input
@@ -56,7 +56,7 @@
             *
               copied
                 bytes-as-input --
-                as-output m
+                to-output m
               m
       --
 
@@ -67,7 +67,7 @@
         [m]
           copied > @
             bytes-as-input --
-            as-output m
+            to-output m
       0
 
   ++> tests-handles-large-data
@@ -78,7 +78,7 @@
         [m]
           copied > @
             bytes-as-input 01-02-03-04-05-06-07-08-09-0A-0B-0C-0D-0E-0F-10-11-12-13-14
-            as-output m
+            to-output m
 
   ++> tests-handles-dead-input
     eq. > @

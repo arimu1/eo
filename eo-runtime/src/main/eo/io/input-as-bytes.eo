@@ -7,7 +7,7 @@
 # ```
 # After dataization, `bts` equals `01-02-03-04-05`.
 
-+alias malloc.chunk.as-output
++alias malloc.chunk.to-output
 +architect yegor256@gmail.com
 +home https://github.com/objectionary/eo
 +package io
@@ -20,7 +20,7 @@
     0
     [m] >>
       seq * > @
-        copied input (as-output m)
+        copied input (to-output m)
         m
 
   ++> tests-bytes-to-input-and-back

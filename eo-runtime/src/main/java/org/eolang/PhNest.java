@@ -149,12 +149,12 @@ final class PhNest implements Phi {
      *
      * <p>When the extension is itself a package (it owns a package of its own
      * name, for example {@code malloc.chunk}, which holds
-     * {@code malloc.chunk.as-output}), it is returned as a nested {@link PhNest}
-     * rather than a plain object copy. Otherwise {@code malloc.chunk.as-output}
+     * {@code malloc.chunk.to-output}), it is returned as a nested {@link PhNest}
+     * rather than a plain object copy. Otherwise {@code malloc.chunk.to-output}
      * would resolve as {@code malloc.take("chunk")} → a plain chunk value →
-     * {@code .take("as-output")}, which is implicit dispatch and would bind that
+     * {@code .take("to-output")}, which is implicit dispatch and would bind that
      * fresh chunk as the receiver. Keeping it a {@link PhNest} makes the trailing
-     * {@code .take("as-output")} a namespace access, leaving the receiver slot for
+     * {@code .take("to-output")} a namespace access, leaving the receiver slot for
      * the caller — the same reasoning as above, one level deeper.</p>
      *
      * @param name The name of the extension

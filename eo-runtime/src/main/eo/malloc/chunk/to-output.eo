@@ -2,7 +2,7 @@
 # Here `allocated` is a `malloc.chunk` object.
 #
 # Because this object lives in the `malloc.chunk` package, it is
-# available on any chunk as `chunk.as-output` (package extension), so
+# available on any chunk as `chunk.to-output` (package extension), so
 # there is no need to reference it explicitly.
 #
 # Imagine you want to read bytes from `console` and save them
@@ -13,7 +13,7 @@
 #   10
 #   [mem]
 #     console.read 10 > input
-#     mem.as-output > output
+#     mem.to-output > output
 #     output.write input > @
 # ```
 #
@@ -29,7 +29,7 @@
 +spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
 +spdx SPDX-License-Identifier: MIT
 
-[allocated] > as-output
+[allocated] > to-output
   [buffer] > write
     (output-block 0).write > @
       buffer
@@ -50,7 +50,7 @@
         [mem]
           seq > @
             *
-              (((as-output mem).write 01-02-03).write 04-05-06-07).write 08-09-A0
+              (((to-output mem).write 01-02-03).write 04-05-06-07).write 08-09-A0
               mem
       01-02-03-04-05-06-07-08-09-A0
 
@@ -60,7 +60,7 @@
         2
         [mem]
           seq * > @
-            (as-output mem).write 01-02-03
+            (to-output mem).write 01-02-03
             mem
       01-02-03
 
@@ -70,6 +70,6 @@
         3
         [mem]
           seq * > @
-            mem.as-output.write 01-02-03
+            mem.to-output.write 01-02-03
             mem
       01-02-03
