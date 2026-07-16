@@ -116,6 +116,9 @@ final class Pretty {
             .append(node.base)
             .append(node.tail);
         for (final Pretty.Node child : node.children) {
+            if (child.test) {
+                block.append('\n');
+            }
             block.append('\n').append(this.layout(child, indent + 1));
         }
         return block.toString();
@@ -130,7 +133,9 @@ final class Pretty {
      */
     private Optional<String> horizontal(final Pretty.Node node, final int indent) {
         final Optional<String> result;
-        if (node.abstractt || node.children.isEmpty()) {
+        if (node.abstractt) {
+            result = this.phi(node, indent);
+        } else if (node.children.isEmpty()) {
             result = Optional.empty();
         } else {
             result = Pretty.inlined(node.children).map(
@@ -141,6 +146,60 @@ final class Pretty {
                     .append(node.tail)
                     .toString()
             );
+        }
+        return result;
+    }
+
+    /**
+     * Render a formation in the compact inline-phi form, when its only
+     * attribute is the {@code φ} decoratee.
+     *
+     * <p>A formation with a {@code [params]} head collapses to
+     * {@code <phi> > [params] > name} (R-3.10.8 §4.5). A test attribute
+     * with no void params has an empty head — the head template renders
+     * it through the {@code ++> name} shorthand — so it collapses to
+     * {@code <phi> ++> name} (R-3.10.8 / R-6.3.6, issue #5567), the
+     * decoratee sitting in front of the {@code ++>} marker instead of a
+     * bracket. An empty head occurs only for that no-void test attribute,
+     * so it selects the shorthand separator here.</p>
+     *
+     * <p>This applies only when {@code @} is the sole binding; a
+     * formation with any other attribute keeps the vertical layout. The
+     * decoratee itself is inlined through the usual {@link #flat} path,
+     * so a decoratee that can't be inlined (a nested formation, a tuple)
+     * yields empty and the caller falls back to the vertical shape; the
+     * penalty/width check then decides whether this single line is
+     * actually preferable.</p>
+     *
+     * @param node The formation node
+     * @param indent The indentation level
+     * @return The single line, or empty if the inline-phi form doesn't apply
+     */
+    private Optional<String> phi(final Pretty.Node node, final int indent) {
+        final Optional<String> result;
+        if (node.children.size() == 1
+            && " > @".equals(node.children.get(0).tail)) {
+            final Pretty.Node decoratee = node.children.get(0);
+            final String middle;
+            if (node.base.isEmpty()) {
+                middle = " ";
+            } else {
+                middle = " > ".concat(node.base);
+            }
+            result = Pretty.flat(
+                new Pretty.Node(
+                    decoratee.base, "", decoratee.abstractt,
+                    false, decoratee.reversed, decoratee.children
+                )
+            ).map(
+                value -> new StringBuilder(this.step().repeat(indent))
+                    .append(value)
+                    .append(middle)
+                    .append(node.tail)
+                    .toString()
+            );
+        } else {
+            result = Optional.empty();
         }
         return result;
     }
@@ -180,7 +239,9 @@ final class Pretty {
      */
     private static Optional<String> flat(final Pretty.Node node) {
         final Optional<String> result;
-        if (node.abstractt || !node.tail.isEmpty() || "*".equals(node.base)) {
+        if (node.reversed && node.children.size() <= 1) {
+            result = Optional.empty();
+        } else if (node.abstractt || !node.tail.isEmpty() || "*".equals(node.base)) {
             result = Optional.empty();
         } else if (node.children.isEmpty()) {
             result = Optional.of(node.base);
@@ -211,9 +272,23 @@ final class Pretty {
 
         /**
          * Whether this object is a formation (its children are
-         * bindings, so it is always laid out vertically).
+         * bindings, so it is laid out vertically, unless its only
+         * binding is the {@code φ} decoratee and the compact inline-phi
+         * form fits on one line).
          */
         private final boolean abstractt;
+
+        /**
+         * Whether this object is a test attribute ({@code +> name}),
+         * which R-6.5.3 requires to be preceded by a blank line.
+         */
+        private final boolean test;
+
+        /**
+         * Whether this object is a reversed dispatch ({@code method.});
+         * a receiver-only one cannot be inlined as an argument.
+         */
+        private final boolean reversed;
 
         /**
          * The children (arguments or bindings), in order.
@@ -225,14 +300,18 @@ final class Pretty {
          * @param head The rendered head
          * @param suffix The rendered suffix
          * @param formation Whether it is a formation
+         * @param attr Whether it is a test attribute
+         * @param rev Whether it is a reversed dispatch
          * @param kids The children
          * @checkstyle ParameterNumberCheck (5 lines)
          */
         Node(final String head, final String suffix, final boolean formation,
-            final List<Pretty.Node> kids) {
+            final boolean attr, final boolean rev, final List<Pretty.Node> kids) {
             this.base = head;
             this.tail = suffix;
             this.abstractt = formation;
+            this.test = attr;
+            this.reversed = rev;
             this.children = kids;
         }
 
@@ -246,6 +325,8 @@ final class Pretty {
                 line.attribute("base").text().orElse(""),
                 line.attribute("tail").text().orElse(""),
                 "yes".equals(line.attribute("abstract").text().orElse("no")),
+                "yes".equals(line.attribute("test").text().orElse("no")),
+                "yes".equals(line.attribute("reversed").text().orElse("no")),
                 line.elements(Filter.withName("line"))
                     .map(Pretty.Node::parse)
                     .collect(Collectors.toList())
