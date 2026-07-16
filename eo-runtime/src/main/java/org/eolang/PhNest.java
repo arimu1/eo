@@ -147,15 +147,31 @@ final class PhNest implements Phi {
      * {@code number} is not a usable receiver value — so it is deliberately
      * left untouched.</p>
      *
+     * <p>When the extension is itself a package (it owns a package of its own
+     * name, for example {@code malloc.chunk}, which holds
+     * {@code malloc.chunk.as-output}), it is returned as a nested {@link PhNest}
+     * rather than a plain object copy. Otherwise {@code malloc.chunk.as-output}
+     * would resolve as {@code malloc.take("chunk")} → a plain chunk value →
+     * {@code .take("as-output")}, which is implicit dispatch and would bind that
+     * fresh chunk as the receiver. Keeping it a {@link PhNest} makes the trailing
+     * {@code .take("as-output")} a namespace access, leaving the receiver slot for
+     * the caller — the same reasoning as above, one level deeper.</p>
+     *
      * @param name The name of the extension
      * @return The extension object
      */
     private Phi extension(final String name) {
         final String fqn = String.join(".", this.pkg, name);
-        if (!this.objects.containsKey(fqn)) {
-            this.objects.put(fqn, PhNest.load(new JavaPath(fqn).toString()));
+        final Phi taken;
+        if (OnClasspath.has(String.format("%s.package-info", new JavaPath(fqn).pkg()))) {
+            taken = new PhNest(fqn);
+        } else {
+            if (!this.objects.containsKey(fqn)) {
+                this.objects.put(fqn, PhNest.load(new JavaPath(fqn).toString()));
+            }
+            taken = this.objects.get(fqn).copy();
         }
-        return this.objects.get(fqn).copy();
+        return taken;
     }
 
     /**
