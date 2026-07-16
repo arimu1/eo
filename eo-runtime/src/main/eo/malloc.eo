@@ -49,9 +49,10 @@
 #         m.id                # get identifier of the block
 #         m.@                 # the same as m.get
 # ```
-# Here the void attribute in the scope object is memory-block object which provides API to write
-# and read data to the memory.
+# Here the void attribute in the scope object is a `malloc.chunk` object which provides API to
+# write and read data to the memory.
 
++alias malloc.chunk
 +architect yegor256@gmail.com
 +home https://github.com/objectionary/eo
 +rt jvm org.eolang:eo-runtime:0.0.0
@@ -78,29 +79,7 @@
 
   [size scope] > of
     [] > @ /bytes
-
-    [id] > allocated
-      get > @
-      read 0 size > get
-
-      [] > size /number
-
-      [size] > resized /Q.malloc.of.allocated
-
-      [source target length] > copy
-        write > @
-          target
-          read source length
-
-      [offset length] > read /bytes
-        ? > cant-read /{string}
-
-      [offset data] > write /bool
-
-      [object] > put
-        seq * > @
-          write 0 object
-          get
+    chunk > allocated
 
   ++> tests-writes-into-memory-of
     mem.eq 10 > @

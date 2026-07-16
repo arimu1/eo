@@ -1,0 +1,54 @@
+# Object `chunk` is a handle to a block of data allocated in heap
+# memory. It is created by `malloc.of` (and, indirectly, by
+# `malloc.empty` and `malloc.for`) and passed into the user scope,
+# where it provides the API to read and write the data of the block.
+#
+# Consider the next code:
+# ```
+# malloc.of
+#   8                         # allocate 8 bytes length block in memory
+#   [c]
+#     seq > @
+#       *
+#         c.write 2 "Hello"   # write object "Hello" with offset 2
+#         c.read 3 4          # read 4 bytes from offset 3 -> "ello"
+#         c.put 42            # write object 42 with offset 0
+#         c.get               # just get all the data from the memory block -> 42
+#         c.size              # get size of the block
+#         c.id                # get identifier of the block
+#         c.@                 # the same as c.get
+# ```
+# Here `c` is a `chunk` object which provides the API to write
+# and read data to the memory.
+
++architect yegor256@gmail.com
++home https://github.com/objectionary/eo
++package malloc
++rt jvm org.eolang:eo-runtime:0.0.0
++rt node eo2js-runtime:0.0.0
++version 0.0.0
++spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
++spdx SPDX-License-Identifier: MIT
+
+[id] > chunk
+  get > @
+  read 0 size > get
+
+  [] > size /number
+
+  [size] > resized /Q.malloc.chunk
+
+  [source target length] > copy
+    write > @
+      target
+      read source length
+
+  [offset length] > read /bytes
+    ? > cant-read /{string}
+
+  [offset data] > write /bool
+
+  [object] > put
+    seq * > @
+      write 0 object
+      get

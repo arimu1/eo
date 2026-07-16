@@ -18,12 +18,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * Dynamic memory.
  * @since 0.19
  */
-final class Heaps {
+public final class Heaps {
 
     /**
      * EOorg.EOeolang.Heaps.
      */
-    static final Heaps INSTANCE = new Heaps();
+    public static final Heaps INSTANCE = new Heaps();
 
     /**
      * All.
@@ -74,7 +74,7 @@ final class Heaps {
      * @param identifier Identifier of block in memory
      * @return Size
      */
-    int size(final int identifier) {
+    public int size(final int identifier) {
         this.lock.lock();
         try {
             if (!this.blocks.containsKey(identifier)) {
@@ -96,7 +96,7 @@ final class Heaps {
      * @param identifier Identifier of block
      * @param size New size
      */
-    void resize(final int identifier, final int size) {
+    public void resize(final int identifier, final int size) {
         if (size < 0) {
             throw new ExFailure(
                 String.format(
@@ -139,7 +139,7 @@ final class Heaps {
      * @param length Length of bytes to read
      * @return True if the range lies within the allocated block
      */
-    boolean fits(final int identifier, final int offset, final int length) {
+    public boolean fits(final int identifier, final int offset, final int length) {
         this.lock.lock();
         try {
             if (!this.blocks.containsKey(identifier)) {
@@ -165,7 +165,7 @@ final class Heaps {
      * @param length Length of bytes to read
      * @return Bytes from the block in memory
      */
-    byte[] read(final int identifier, final int offset, final int length) {
+    public byte[] read(final int identifier, final int offset, final int length) {
         this.lock.lock();
         try {
             if (!this.fits(identifier, offset, length)) {
@@ -190,7 +190,7 @@ final class Heaps {
      * @param offset Writing offset
      * @param data Data to write
      */
-    void write(final int identifier, final int offset, final byte[] data) {
+    public void write(final int identifier, final int offset, final byte[] data) {
         this.lock.lock();
         try {
             if (!this.blocks.containsKey(identifier)) {

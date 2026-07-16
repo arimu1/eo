@@ -9,6 +9,8 @@
  */
 package org.eolang;
 
+import org.eolang.EO_malloc.EOchunk$EOread;
+import org.eolang.EO_malloc.EOchunk$EOsize;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -16,8 +18,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test case verifying {@link Expect}-based error messages
- * raised by {@link EOmalloc$EOof$EOallocated$EOsize} and
- * {@link EOmalloc$EOof$EOallocated$EOread} when their integer
+ * raised by {@link EOchunk$EOsize} and
+ * {@link EOchunk$EOread} when their integer
  * attributes are invalid.
  * @since 0.51
  * @checkstyle TypeNameCheck (5 lines)
@@ -33,7 +35,7 @@ final class EOmallocAllocatedExpectTest {
                 ExAbstract.class,
                 () -> new Dataized(
                     new PhApplication(
-                        new EOmalloc$EOof$EOallocated$EOsize(),
+                        new EOchunk$EOsize(),
                         Phi.RHO,
                         new PhApplication(
                             new EOmallocAllocatedExpectTest.Dummy(),
@@ -56,7 +58,7 @@ final class EOmallocAllocatedExpectTest {
                 ExAbstract.class,
                 () -> new Dataized(
                     new PhApplication(
-                        new EOmalloc$EOof$EOallocated$EOread(),
+                        new EOchunk$EOread(),
                         Phi.RHO,
                         new PhApplication(
                             new EOmallocAllocatedExpectTest.Dummy(),
@@ -118,7 +120,7 @@ final class EOmallocAllocatedExpectTest {
     }
 
     /**
-     * A {@code malloc.of.allocated.read} Phi with a valid id and the
+     * A {@code malloc.chunk.read} Phi with a valid id and the
      * given {@code offset} and {@code length}.
      * @since 0.51
      */
@@ -148,7 +150,7 @@ final class EOmallocAllocatedExpectTest {
             return new PhApplication(
                 new PhApplication(
                     new PhApplication(
-                        new EOmalloc$EOof$EOallocated$EOread(),
+                        new EOchunk$EOread(),
                         Phi.RHO,
                         new PhApplication(
                             new EOmallocAllocatedExpectTest.Dummy(),

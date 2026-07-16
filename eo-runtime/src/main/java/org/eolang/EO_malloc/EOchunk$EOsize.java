@@ -7,16 +7,24 @@
  * @checkstyle PackageNameCheck (4 lines)
  * @checkstyle TrailingCommentCheck (3 lines)
  */
-package org.eolang;
+package org.eolang.EO_malloc; // NOPMD
+
+import org.eolang.Atom;
+import org.eolang.Data;
+import org.eolang.Expect;
+import org.eolang.Heaps;
+import org.eolang.PhDefault;
+import org.eolang.Phi;
+import org.eolang.XmirObject;
 
 /**
- * Malloc.of.allocated.size object.
- * @since 0.41.0
+ * Malloc.chunk.size object.
+ * @since 0.57
  * @checkstyle TypeNameCheck (5 lines)
  */
-@XmirObject(oname = "malloc.of.allocated.size")
+@XmirObject(oname = "malloc.chunk.size")
 @SuppressWarnings("PMD.AvoidDollarSigns")
-public final class EOmalloc$EOof$EOallocated$EOsize extends PhDefault implements Atom {
+public final class EOchunk$EOsize extends PhDefault implements Atom {
 
     @Override
     public Phi lambda() {

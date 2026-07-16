@@ -1,8 +1,8 @@
-# Makes an output from allocated block in memory.
-# Here `allocated` is `malloc.of.allocated` object.
+# Makes an output from a chunk of memory.
+# Here `allocated` is a `malloc.chunk` object.
 #
 # Imagine you want to read bytes from `console` and save them
-# to block in memory.
+# to a chunk in memory.
 # Here's how you can do it:
 # ```
 # malloc.of > result
@@ -14,7 +14,7 @@
 # ```
 #
 # First, you read 10 bytes from `console`.
-# Second, you create an output from allocated block in memory.
+# Second, you create an output from the chunk of memory.
 # Third, you write read bytes to output
 # After the dataization the object `result` contains read bytes.
 

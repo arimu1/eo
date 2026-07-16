@@ -7,21 +7,31 @@
  * @checkstyle PackageNameCheck (4 lines)
  * @checkstyle TrailingCommentCheck (3 lines)
  */
-package org.eolang;
+package org.eolang.EO_malloc; // NOPMD
+
+import org.eolang.Atom;
+import org.eolang.AtVoid;
+import org.eolang.Attr;
+import org.eolang.Attrs;
+import org.eolang.Expect;
+import org.eolang.Heaps;
+import org.eolang.PhDefault;
+import org.eolang.Phi;
+import org.eolang.XmirObject;
 
 /**
- * Malloc.of.allocated.resized object.
- * @since 0.41.0
+ * Malloc.chunk.resized object.
+ * @since 0.57
  * @checkstyle TypeNameCheck (5 lines)
  */
-@XmirObject(oname = "malloc.of.allocated.resized")
+@XmirObject(oname = "malloc.chunk.resized")
 @SuppressWarnings("PMD.AvoidDollarSigns")
-public final class EOmalloc$EOof$EOallocated$EOresized extends PhDefault implements Atom {
+public final class EOchunk$EOresized extends PhDefault implements Atom {
 
     /**
      * Ctor.
      */
-    public EOmalloc$EOof$EOallocated$EOresized() {
+    public EOchunk$EOresized() {
         super(new Attrs(new Attr("new-size", new AtVoid("new-size"))));
     }
 

@@ -7,16 +7,27 @@
  * @checkstyle PackageNameCheck (4 lines)
  * @checkstyle TrailingCommentCheck (3 lines)
  */
-package org.eolang;
+package org.eolang.EO_malloc; // NOPMD
+
+import org.eolang.Atom;
+import org.eolang.AtVoid;
+import org.eolang.Attr;
+import org.eolang.Attrs;
+import org.eolang.Data;
+import org.eolang.Expect;
+import org.eolang.Heaps;
+import org.eolang.PhDefault;
+import org.eolang.Phi;
+import org.eolang.XmirObject;
 
 /**
- * Malloc.of.allocated.read object.
- * @since 0.36.0
+ * Malloc.chunk.read object.
+ * @since 0.57
  * @checkstyle TypeNameCheck (5 lines)
  */
-@XmirObject(oname = "malloc.of.allocated.read")
+@XmirObject(oname = "malloc.chunk.read")
 @SuppressWarnings("PMD.AvoidDollarSigns")
-public final class EOmalloc$EOof$EOallocated$EOread extends PhDefault implements Atom {
+public final class EOchunk$EOread extends PhDefault implements Atom {
 
     /**
      * Name of the error-branch void that holds the caller's read fallback.
@@ -26,13 +37,13 @@ public final class EOmalloc$EOof$EOallocated$EOread extends PhDefault implements
     /**
      * Ctor.
      */
-    public EOmalloc$EOof$EOallocated$EOread() {
+    public EOchunk$EOread() {
         super(new Attrs(
             new Attr("offset", new AtVoid("offset")),
             new Attr("length", new AtVoid("length")),
             new Attr(
-                EOmalloc$EOof$EOallocated$EOread.FALLBACK,
-                new AtVoid(EOmalloc$EOof$EOallocated$EOread.FALLBACK)
+                EOchunk$EOread.FALLBACK,
+                new AtVoid(EOchunk$EOread.FALLBACK)
             )
         ));
     }
@@ -65,7 +76,7 @@ public final class EOmalloc$EOof$EOallocated$EOread extends PhDefault implements
         if (Heaps.INSTANCE.fits(id, offset, length)) {
             result = new Data.ToPhi(Heaps.INSTANCE.read(id, offset, length));
         } else {
-            result = this.take(EOmalloc$EOof$EOallocated$EOread.FALLBACK);
+            result = this.take(EOchunk$EOread.FALLBACK);
             result.put(
                 0,
                 new Data.ToPhi(

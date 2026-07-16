@@ -7,21 +7,33 @@
  * @checkstyle PackageNameCheck (4 lines)
  * @checkstyle TrailingCommentCheck (3 lines)
  */
-package org.eolang;
+package org.eolang.EO_malloc; // NOPMD
+
+import org.eolang.Atom;
+import org.eolang.AtVoid;
+import org.eolang.Attr;
+import org.eolang.Attrs;
+import org.eolang.Data;
+import org.eolang.Dataized;
+import org.eolang.Expect;
+import org.eolang.Heaps;
+import org.eolang.PhDefault;
+import org.eolang.Phi;
+import org.eolang.XmirObject;
 
 /**
- * Malloc.of.allocated.write object.
- * @since 0.36.0
+ * Malloc.chunk.write object.
+ * @since 0.57
  * @checkstyle TypeNameCheck (5 lines)
  */
-@XmirObject(oname = "malloc.of.allocated.write")
+@XmirObject(oname = "malloc.chunk.write")
 @SuppressWarnings("PMD.AvoidDollarSigns")
-public final class EOmalloc$EOof$EOallocated$EOwrite extends PhDefault implements Atom {
+public final class EOchunk$EOwrite extends PhDefault implements Atom {
 
     /**
      * Ctor.
      */
-    public EOmalloc$EOof$EOallocated$EOwrite() {
+    public EOchunk$EOwrite() {
         super(new Attrs(
             new Attr("offset", new AtVoid("offset")),
             new Attr("data", new AtVoid("data"))
