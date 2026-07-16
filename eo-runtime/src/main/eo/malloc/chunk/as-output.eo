@@ -1,6 +1,10 @@
 # Makes an output from a chunk of memory.
 # Here `allocated` is a `malloc.chunk` object.
 #
+# Because this object lives in the `malloc.chunk` package, it is
+# available on any chunk as `chunk.as-output` (package extension), so
+# there is no need to reference it explicitly.
+#
 # Imagine you want to read bytes from `console` and save them
 # to a chunk in memory.
 # Here's how you can do it:
@@ -9,7 +13,7 @@
 #   10
 #   [mem]
 #     console.read 10 > input
-#     malloc.as-output mem > output
+#     mem.as-output > output
 #     output.write input > @
 # ```
 #
@@ -20,7 +24,7 @@
 
 +architect yegor256@gmail.com
 +home https://github.com/objectionary/eo
-+package malloc
++package malloc.chunk
 +version 0.0.0
 +spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
 +spdx SPDX-License-Identifier: MIT
@@ -57,5 +61,15 @@
         [mem]
           seq * > @
             (as-output mem).write 01-02-03
+            mem
+      01-02-03
+
+  ++> tests-makes-an-output-via-chunk-extension
+    eq. > @
+      malloc.of
+        3
+        [mem]
+          seq * > @
+            mem.as-output.write 01-02-03
             mem
       01-02-03

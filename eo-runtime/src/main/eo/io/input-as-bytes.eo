@@ -7,7 +7,7 @@
 # ```
 # After dataization, `bts` equals `01-02-03-04-05`.
 
-+alias malloc.as-output
++alias malloc.chunk.as-output
 +architect yegor256@gmail.com
 +home https://github.com/objectionary/eo
 +package io

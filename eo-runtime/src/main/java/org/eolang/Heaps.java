@@ -50,7 +50,7 @@ public final class Heaps {
      * @param size How many bytes
      * @return The identifier of pointer to the block in memory
      */
-    int malloc(final Phi phi, final int size) {
+    public int malloc(final Phi phi, final int size) {
         final int identifier = phi.hashCode();
         this.lock.lock();
         try {
@@ -228,7 +228,7 @@ public final class Heaps {
      * Free it.
      * @param identifier Identifier of pointer
      */
-    void free(final int identifier) {
+    public void free(final int identifier) {
         this.lock.lock();
         try {
             if (!this.blocks.containsKey(identifier)) {

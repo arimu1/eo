@@ -9,8 +9,8 @@
  */
 package org.eolang.EO_malloc; // NOPMD
 
-import org.eolang.Atom;
 import org.eolang.AtVoid;
+import org.eolang.Atom;
 import org.eolang.Attr;
 import org.eolang.Attrs;
 import org.eolang.Expect;
